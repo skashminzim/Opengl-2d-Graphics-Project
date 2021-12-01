@@ -1,7 +1,9 @@
 #include<windows.h>
 #include <GL/glut.h>
 #include<math.h>
+#include<MMSYSTEM.h>
 float angle1 = 0.0f;
+float angle2 = 0.0f;
 float tx1 = 0;
 float ty1 = 0;
 float tx2 = 0;
@@ -27,7 +29,7 @@ float p4 = 0;
 //int meghStatus = 1;
 
 float move, angle;
-
+       void play_music(){PlaySound("yellow.wav", NULL, ASYNC_MODE_COMPATIBILITY);}
        void music1()
        {//glClear(GL_COLOR_BUFFER_BIT);
         if(m_status==1){
@@ -69,6 +71,7 @@ float move, angle;
         else{
             tx1=0;
             ty1=0;}
+        //PlaySound("yellow.wav", NULL, ASYNC_MODE_COMPATIBILITY);
        }}
         void music2()
        {if(m_status==1){
@@ -1031,7 +1034,16 @@ for (int i = 0; i <= 50000; i++) {
 glEnd();
 ///plant///////////
 //base//
-glColor3f(139/255.0f, 139/255.0f, 122/255.0f);
+
+glColor3f(218/255.0f, 185/255.0f, 32/255.0f);
+glBegin(GL_QUADS);
+ glVertex2f(2.97, -7.2);
+ glVertex2f(3.63, -7.2);
+ glVertex2f(3.93, -5.2);
+ glVertex2f(2.62, -5.2);
+glEnd();
+//glColor3f(139/255.0f, 139/255.0f, 122/255.0f);
+glColor3f(184/255.0f, 134/255.0f, 11/255.0f);
 glBegin(GL_QUADS);
  glVertex2f(3.0, -7.2);
  glVertex2f(3.6, -7.2);
@@ -1297,19 +1309,33 @@ glBegin(GL_TRIANGLE_FAN);
 //boro kata
 glMatrixMode(GL_MODELVIEW);
 glPushMatrix();
-//glTranslatef(-7.5, 10f, 0.0f);
-//glRotatef(angle1, 1.0f,0.0f, 0.0f);
-//glTranslatef(7.5f,-10f, 0.0f);
-    //angle1 += 1.0f;
-//glLoadIdentity();
-//glRotatef(30,0.0f,1.0f,0.0f); //rotate object by 30 degree with respect to y-axis
-//glTranslatef(-8f, 10f, 0.0f);
-glBegin(GL_TRIANGLES);
- glVertex2f(-7.54, 10.05);
-  glVertex2f(-7.47, 9.95);
-  glVertex2f(-7.5, 11.3);
+glTranslatef(-7.5f, 10.0f, 0.0f);
+glRotatef(angle1, 0.0f,0.0f, 1.0f);
+glTranslatef(7.5f,-10.0f, 0.0f);
+/*glBegin(GL_TRIANGLES);
+ glVertex2f(-7.52, 10.05);
+  glVertex2f(-7.46, 9.95);
+  glVertex2f(-7.5, 10.8);
+glEnd();*/
+glLineWidth(2.0f);
+glBegin(GL_LINES);
+  glVertex2f(-7.5, 10.66);
+  glVertex2f(-7.5, 10);
 glEnd();
 glPopMatrix();
+glLineWidth(1.0f);
+//choto kata
+glPushMatrix();
+glTranslatef(-7.5f, 10.0f, 0.0f);
+glRotatef(angle2, 0.0f,0.0f, 1.0f);
+glTranslatef(7.5f,-10.0f, 0.0f);
+glLineWidth(3.0f);
+glBegin(GL_LINES);
+  glVertex2f(-7.5, 10.45);
+  glVertex2f(-7.5, 10);
+glEnd();
+glPopMatrix();
+glLineWidth(1.0f);
 movemegh1();
 movemegh2();
 movemegh3();
@@ -1323,6 +1349,7 @@ music6();//left er right
 music7();//left er upor
 music8();//right er right
 music9();
+
 glFlush();
 glutPostRedisplay();
 }
@@ -1333,6 +1360,8 @@ void spe_key(int key, int x, int y)
 
 		case GLUT_KEY_UP:
 		    m_status=1;
+		    //PlaySound("yellow.wav", NULL, ASYNC_MODE_COMPATIBILITY);
+		    sndPlaySound("yellow.wav", SND_ASYNC | SND_FILENAME|SND_LOOP);
             glFlush();
             glutPostRedisplay();
             break;
@@ -1340,7 +1369,22 @@ void spe_key(int key, int x, int y)
 			break;
 	}
 }
-
+void update(int value){
+    angle1-=2.0f;
+    if(angle1>360.0){
+        angle1-=360;
+    }
+    glutPostRedisplay();
+    glutTimerFunc(10,update, 0);
+}
+void update1(int value){
+    angle2-=2.0f;
+    if(angle2>360.0){
+        angle2-=360;
+    }
+    glutPostRedisplay();
+    glutTimerFunc(950,update1, 0);
+}
 int main(int iArgc , char** cppArgv)
 {
 glutInit(&iArgc , cppArgv);
@@ -1357,6 +1401,10 @@ Initialize();
 
 glutDisplayFunc(Draw);
 glutSpecialFunc(spe_key);
+//play_music();
+//sndPlaySound("yellow.wav", SND_ASYNC);
+glutTimerFunc(10,update, 0);
+glutTimerFunc(950,update1, 0);
 glutMainLoop();
 return 0;
 }
