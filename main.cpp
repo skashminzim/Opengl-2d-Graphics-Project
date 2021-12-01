@@ -72,6 +72,7 @@ float move, angle;
             tx1=0;
             ty1=0;}
         //PlaySound("yellow.wav", NULL, ASYNC_MODE_COMPATIBILITY);
+        //sndPlaySound("yellow.wav", SND_ASYNC | SND_FILENAME|SND_LOOP);
        }}
         void music2()
        {if(m_status==1){
@@ -1362,6 +1363,14 @@ void spe_key(int key, int x, int y)
 		    m_status=1;
 		    //PlaySound("yellow.wav", NULL, ASYNC_MODE_COMPATIBILITY);
 		    sndPlaySound("yellow.wav", SND_ASYNC | SND_FILENAME|SND_LOOP);
+            glFlush();
+            glutPostRedisplay();
+            break;
+        case GLUT_KEY_DOWN:
+		    m_status=0;
+		    //PlaySound("yellow.wav", NULL, ASYNC_MODE_COMPATIBILITY);
+		    //sndPlaySound("yellow.wav", SND_ASYNC | SND_FILENAME|SND_LOOP);
+		    sndPlaySound(NULL, SND_ASYNC | SND_FILENAME|SND_LOOP);
             glFlush();
             glutPostRedisplay();
             break;
